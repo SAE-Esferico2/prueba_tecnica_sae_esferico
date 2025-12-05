@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- CreateTable
 CREATE TABLE "Provincia" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "nombre" TEXT NOT NULL,
 
     CONSTRAINT "Provincia_pkey" PRIMARY KEY ("id")
 );
@@ -12,7 +12,7 @@ CREATE TABLE "Provincia" (
 -- CreateTable
 CREATE TABLE "Municipio" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "nombre" TEXT NOT NULL,
     "provinciaId" INTEGER NOT NULL,
 
     CONSTRAINT "Municipio_pkey" PRIMARY KEY ("id")
@@ -33,7 +33,6 @@ CREATE TABLE "Parcela" (
     "id" SERIAL NOT NULL,
     "geom" geometry(Polygon, 4326) NOT NULL,
     "usuarioId" INTEGER NOT NULL,
-    "provinciaId" INTEGER NOT NULL,
     "municipioId" INTEGER NOT NULL,
 
     CONSTRAINT "Parcela_pkey" PRIMARY KEY ("id")
@@ -47,12 +46,13 @@ CREATE TABLE "Recinto" (
     "fechaSiembra" TIMESTAMP(3) NOT NULL,
     "fechaCosecha" TIMESTAMP(3),
     "geom" geometry(Polygon, 4326) NOT NULL,
+    "parcelaId" INTEGER NOT NULL,
 
     CONSTRAINT "Recinto_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Provincia_name_key" ON "Provincia"("name");
+CREATE UNIQUE INDEX "Provincia_nombre_key" ON "Provincia"("nombre");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
@@ -74,3 +74,6 @@ ALTER TABLE "Parcela" ADD CONSTRAINT "Parcela_municipioId_fkey" FOREIGN KEY ("mu
 
 -- AddForeignKey
 ALTER TABLE "Parcela" ADD CONSTRAINT "Parcela_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Recinto" ADD CONSTRAINT "Recinto_parcelaId_fkey" FOREIGN KEY ("parcelaId") REFERENCES "Parcela"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

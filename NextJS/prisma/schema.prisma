@@ -19,13 +19,13 @@ datasource db {
 
 model Provincia {
   id         Int         @id @default(autoincrement())
-  name       String      @unique
+  nombre     String      @unique
   municipios Municipio[]
 }
 
 model Municipio {
   id          Int       @id @default(autoincrement())
-  name        String
+  nombre      String
   provincia   Provincia @relation(fields: [provinciaId], references: [id])
   provinciaId Int
   parcelas    Parcela[]
@@ -44,18 +44,28 @@ model Parcela {
   municipio   Municipio                              @relation(fields: [municipioId], references: [id])
   geom        Unsupported("geometry(Polygon, 4326)")
   usuario     Usuario                                @relation(fields: [usuarioId], references: [id])
+  recintos    Recinto[]
   usuarioId   Int
-  provinciaId Int
   municipioId Int
+
   @@index([geom], type: Gist)
 }
 
 model Recinto {
   id           Int                                    @id @default(autoincrement())
-  nombre       String                                 @unique
-  cultivo      String
+  cultivo      Cultivo                                @relation(fields: [cultivoId], references: [id])
+  cultivoId    Int
   fechaSiembra DateTime
   fechaCosecha DateTime?
   geom         Unsupported("geometry(Polygon, 4326)")
+  parcela      Parcela                                @relation(fields: [parcelaId], references: [id])
+  parcelaId    Int
+
   @@index([geom], type: Gist)
+}
+
+model Cultivo {
+  id       Int       @id @default(autoincrement())
+  nombre   String    @unique
+  recintos Recinto[]
 }
