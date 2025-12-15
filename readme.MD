@@ -23,26 +23,33 @@ Esta prueba técnica consiste en desarrollar una aplicación web con Next.js que
 
 ### Instalación
 
-1. **Instalar dependencias:**
+1. **Configurar variables de entorno:**
+
+   ```bash
+   cp env.development.example .env.development
+   cp env.test.example .env.test
+   ```
+
+2. **Instalar dependencias:**
 
    ```bash
    pnpm install
    # o
    npm install
    ```
-2. **Levantar la base de datos PostgreSQL con PostGIS:**
+3. **Levantar la base de datos PostgreSQL con PostGIS:**
 
    ```bash
    docker compose up -d
    ```
-3. **Ejecutar migraciones en la base de datos de desarrollo:**
+4. **Ejecutar migraciones en la base de datos de desarrollo:**
 
    ```bash
    pnpm run prisma:migrate:dev
    # o
    npm run prisma:migrate:dev
    ```
-4. **Ejecutar migraciones en la base de datos de test:**
+5. **Ejecutar migraciones en la base de datos de test:**
 
    ```bash
    pnpm run prisma:migrate:test
